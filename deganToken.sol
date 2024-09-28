@@ -8,11 +8,12 @@ contract degenToken is ERC20{
     mapping (address => uint) private bal;
     
     struct Reward {
+        uint itenno;
         string name;
         uint cost; // Cost in tokens
     }
 
-    Reward[] private rewards;   
+    Reward[] public rewards;   
         // Predefined rewards  
     
     struct Inventory {
@@ -21,14 +22,14 @@ contract degenToken is ERC20{
         address account;
     }
 
-    Inventory[] private inventory;   
+    Inventory[] public inventory;   
         // Predefined rewards 
 
     constructor() ERC20( "Degen", "DGN"){
         owner = msg.sender;
-        rewards.push(Reward("Sword", 1000));
-        rewards.push(Reward("Shield", 3000));
-        rewards.push(Reward("Health Potion", 2500));           
+        rewards.push(Reward(1,"Sword", 1000));
+        rewards.push(Reward(2,"Shield", 3000));
+        rewards.push(Reward(3,"Health Potion", 2500));           
     }
 
     function aaA_mintToken( address _to, uint _amount) public returns (address) {  
@@ -51,7 +52,7 @@ contract degenToken is ERC20{
     }
 
     // Function to redeem reward
-    function aaC_redeem(uint _rewardId) external returns (uint, string memory){
+    function aaC_redeem(uint _rewardId) external{
         require(_rewardId < rewards.length, "Invalid reward ID");
         Reward memory reward = rewards[_rewardId];
         require(bal[msg.sender] >= reward.cost, "Insufficient balance to redeem this reward");
@@ -63,8 +64,6 @@ contract degenToken is ERC20{
         address acc = msg.sender;
 
         inventory.push(Inventory(reward.name,reward.cost,acc));
-
-        return (bal[msg.sender], "redeemed");
     }
 
     function aaD_burnToken(uint _amount) external {
@@ -81,4 +80,5 @@ contract degenToken is ERC20{
     {
         return rewards;
     }
+
 }
